@@ -1,0 +1,73 @@
+﻿@page "/fetchdata"
+
+@using Employee_Blazor.DataAccess
+@using Employee_Blazor.Models
+@inject EmployeeService EmployeeService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (Employees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @*<div class="row">
+            <div class="col-sm-2">Employee Id</div>
+            <div class="col-sm-2">First Name</div>
+            <div class="col-sm-2">Last Name</div>
+            <div class="col-sm-2">DOB</div>
+            <div class="col-sm-2">Phone Number</div>
+            <div class="col-sm-2">Email</div>
+        </div>
+        @foreach (var employee in Employees)
+        {
+            <div class="row">
+                <div class="col-sm-2">@employee.EmployeeId</div>
+                <div class="col-sm-2">@employee.FirstName</div>
+                <div class="col-sm-2">@employee.LastName</div>
+                <div class="col-sm-2">@employee.DateOfBirth.ToShortDateString()</div>
+                <div class="col-sm-2">@employee.PhoneNumber</div>
+                <div class="col-sm-2">@employee.Email</div>
+            </div>
+        }*@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>DOB</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Employees)
+            {
+                <tr>
+                    <td>@employee.EmployeeId</td>
+                    <td>@employee.FirstName</td>
+                    <td>@employee.LastName</td>
+                    <td>@employee.DateOfBirth.ToShortDateString()</td>
+                    <td>@employee.PhoneNumber</td>
+                    <td>@employee.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Employee> Employees;
+    int EmployeeId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employees = await EmployeeService.GetEmployeesAsync();
+    }
+
+    
+}
