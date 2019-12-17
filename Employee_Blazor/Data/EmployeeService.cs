@@ -1,4 +1,5 @@
 ﻿using Employee_Blazor.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,9 +26,19 @@ namespace Employee_Blazor.DataAccess
             return Task.FromResult(list.ToList());
         }
 
-        public void AddEmployee(Employee model)
+        public void Create(Employee employee)
         {
-            DataRepository.Add(model);
+            DataRepository.Add(employee);
+        }
+
+        public Employee Details(int id)
+        {
+            return DataRepository.Get(id);
+        }
+
+        public void Edit([FromBody]Employee employee, Employee entity)
+        {
+            DataRepository.Update(employee, entity);
         }
     }
 }

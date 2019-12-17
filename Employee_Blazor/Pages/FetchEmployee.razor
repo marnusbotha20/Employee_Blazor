@@ -1,4 +1,4 @@
-﻿@page "/fetchdata"
+﻿@page "/FetchEmployee"
 
 @using Employee_Blazor.DataAccess
 @using Employee_Blazor.Models
@@ -7,6 +7,9 @@
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
+<p>
+    <a href="/addemployee">Create New</a>
+</p>
 
 @if (Employees == null)
 {
@@ -14,25 +17,6 @@
 }
 else
 {
-    @*<div class="row">
-            <div class="col-sm-2">Employee Id</div>
-            <div class="col-sm-2">First Name</div>
-            <div class="col-sm-2">Last Name</div>
-            <div class="col-sm-2">DOB</div>
-            <div class="col-sm-2">Phone Number</div>
-            <div class="col-sm-2">Email</div>
-        </div>
-        @foreach (var employee in Employees)
-        {
-            <div class="row">
-                <div class="col-sm-2">@employee.EmployeeId</div>
-                <div class="col-sm-2">@employee.FirstName</div>
-                <div class="col-sm-2">@employee.LastName</div>
-                <div class="col-sm-2">@employee.DateOfBirth.ToShortDateString()</div>
-                <div class="col-sm-2">@employee.PhoneNumber</div>
-                <div class="col-sm-2">@employee.Email</div>
-            </div>
-        }*@
     <table class="table">
         <thead>
             <tr>
@@ -54,6 +38,10 @@ else
                     <td>@employee.DateOfBirth.ToShortDateString()</td>
                     <td>@employee.PhoneNumber</td>
                     <td>@employee.Email</td>
+                    <td>
+                        <a href='/editemployee/@employee.EmployeeId'>Edit</a>  |
+                        <a href='/delete/@employee.EmployeeId'>Delete</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -69,5 +57,5 @@ else
         Employees = await EmployeeService.GetEmployeesAsync();
     }
 
-    
+
 }
