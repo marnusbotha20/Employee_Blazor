@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_Blazor.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    [Migration("20191218105801_AddedDefaultData")]
-    partial class AddedDefaultData
+    [Migration("20191218123159_InitialDbCreate")]
+    partial class InitialDbCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,28 @@ namespace Employee_Blazor.Migrations
                         {
                             CityId = 2,
                             CityName = "Johannesburg"
+                        });
+                });
+
+            modelBuilder.Entity("Employee_Blazor.Models.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company");
+
+                    b.HasData(
+                        new
+                        {
+                            CompanyId = 1,
+                            Name = "atWork Internet Solutions"
                         });
                 });
 
@@ -90,6 +112,9 @@ namespace Employee_Blazor.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -112,6 +137,8 @@ namespace Employee_Blazor.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Employees");
 
@@ -172,6 +199,13 @@ namespace Employee_Blazor.Migrations
                             CourseId = 1,
                             EmployeeId = 2L
                         });
+                });
+
+            modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
+                {
+                    b.HasOne("Employee_Blazor.Models.Company", "Company")
+                        .WithMany("Employee")
+                        .HasForeignKey("CompanyId");
                 });
 
             modelBuilder.Entity("Employee_Blazor.Models.EmployeeCourse", b =>

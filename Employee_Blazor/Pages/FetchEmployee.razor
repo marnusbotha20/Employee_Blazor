@@ -43,6 +43,7 @@
                     <th>Gender</th>
                     <th>Department</th>
                     <th>City</th>
+                    <th>Total Credits</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +59,7 @@
                         <td>@emp.Gender</td>
                         <td>@emp.Department</td>
                         <td>@emp.City</td>
+                        <td></td>
                         <td>
                             <button class="btn btn-default" @onclick="@(async () => await EditEmployee(@emp.EmployeeId))">Edit</button>
                             <button class="btn btn-danger" @onclick="@(async () => await DeleteConfirm(@emp.EmployeeId))">Delete</button>

@@ -11,6 +11,7 @@ namespace Employee_Blazor.DataAccess
         {
         }
 
+        public DbSet<Company> Company { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Cities> Cities { get; internal set; }
         public DbSet<Courses> Courses { get; set; }
@@ -19,6 +20,8 @@ namespace Employee_Blazor.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EmployeeCourse>().HasKey(bc => new { bc.CourseId, bc.EmployeeId });
+
+            modelBuilder.Entity<Company>().HasKey(c => new { c.CompanyId });
 
             modelBuilder.Entity<EmployeeCourse>()
                 .HasOne(bc => bc.Courses)
@@ -29,6 +32,18 @@ namespace Employee_Blazor.DataAccess
                 .HasOne(bc => bc.Employee)
                 .WithMany(c => c.EmployeeCourse)
                 .HasForeignKey(bc => bc.EmployeeId);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(bc => bc.Company)
+                .WithMany(s => s.Employee);
+
+            var Company = new Company()
+            {
+                CompanyId = 1,
+                Name = "atWork Internet Solutions"
+            };
+
+            modelBuilder.Entity<Company>().HasData(Company);
 
             modelBuilder.Entity<Cities>().HasData(new Cities
             {
@@ -71,7 +86,8 @@ namespace Employee_Blazor.DataAccess
                     PhoneNumber = "999-888-7777",
                     City = "Pretoria",
                     Gender = Gender.Male.ToString(),
-                    Department = "IT"
+                    Department = "IT",
+                    //Company = Company
 
                 }, new Employee
                 {
@@ -83,7 +99,8 @@ namespace Employee_Blazor.DataAccess
                     PhoneNumber = "111-222-3333",
                     City = "Johannesburg",
                     Gender = Gender.Male.ToString(),
-                    Department = "Management"
+                    Department = "Management",
+                    //Company = Company
                 }
             );
 

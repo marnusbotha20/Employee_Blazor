@@ -20,5 +20,7 @@ namespace Employee_Blazor.Models
         public string City { get; set; }
 
         public ICollection<EmployeeCourse> EmployeeCourse { get; set; }
+
+        public Company Company { get; set; }
     }
 }
