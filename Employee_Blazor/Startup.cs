@@ -10,6 +10,7 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Blazor.Services;
+using Employee_Blazor.Service;
 
 namespace Employee_Blazor
 {
@@ -27,6 +28,7 @@ namespace Employee_Blazor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<EmployeeService>();
+            services.AddScoped<CourseService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

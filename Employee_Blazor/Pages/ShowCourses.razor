@@ -1,0 +1,165 @@
+﻿@page "/ShowCourses"
+
+@using Employee_Blazor.Service
+@using Employee_Blazor.Models
+
+@inject CourseService CourseService
+
+<style>
+    .table {
+        margin-top: 25px;
+    }
+</style>
+<h1>Course Management</h1>
+
+<div>
+    <div style="float:left">
+        <button class="btn btn-primary" @onclick="@AddCourse">Add Course</button>
+    </div>
+    <div style="float:right; width:40%;">
+        <div class="col-sm-6" style="float:left">
+            <input class="form-control" type="text" placeholder="Search" @bind="@SearchString" />
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default btn-info" @onclick="@FilterCourse">Filter</button>
+        </div>
+    </div>
+</div>
+<div>
+    @if (courseList == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="col-sm-3">
+                Id
+                </div>
+                <div class="col-sm-3">
+                Course Name
+                </div>
+                <div class="col-sm-3">
+                Credits
+                </div>
+                <div class="col-sm-3">
+                No Of Employees
+                </div>
+            </div>
+            <div class="col-sm-6">
+                Actions
+            </div>
+        </div>
+        @foreach (var course in courseList)
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-sm-3">
+                        @course.CourseId
+                    </div>
+                    <div class="col-sm-3">
+                        @course.CourseName
+                    </div>
+                    <div class="col-sm-3">
+                        @course.Credits
+                    </div>
+                    <div class="col-sm-3">
+                        0
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-default" @onclick="@(async () => await EditCourse(course.CourseId))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(async () => await DeleteCourse(course.CourseId))">Delete</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    protected string modalTitle { get; set; }
+    protected Boolean isDelete = false;
+    protected Boolean isAdd = false;
+
+    protected string SearchString { get; set; }
+    protected List<Courses> courseList = new List<Courses>();
+    protected Courses course = new Courses();
+
+    protected int NoCourses { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCourses();
+    }
+
+    protected async Task GetCourses()
+    {
+        courseList = await CourseService.GetCourses();
+    }
+
+    protected async Task FilterCourse()
+    {
+        await GetCourses();
+        if (SearchString != "")
+        {
+            courseList = courseList.Where(x => x.CourseName.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+        }
+    }
+
+    protected void AddCourse()
+    {
+        course = new Courses();
+        this.modalTitle = "Add Course";
+        this.isAdd = true;
+    }
+
+    protected async Task EditCourse(int ID)
+    {
+        course = await CourseService.CourseDetails(ID);
+        this.modalTitle = "Edit Course";
+        this.isAdd = true;
+    }
+
+    protected async Task SaveCourse()
+    {
+        if (course.CourseId != 0)
+        {
+            await Task.Run(() =>
+            {
+                CourseService.EditCourse(course);
+            });
+        }
+        else
+        {
+            await Task.Run(() =>
+            {
+                CourseService.CreateCourse(course);
+            });
+        }
+        this.isAdd = false;
+        await GetCourses();
+    }
+
+    protected async Task DeleteConfirm(int ID)
+    {
+        course = await CourseService.CourseDetails(Convert.ToInt32(ID));
+        this.isDelete = true;
+    }
+
+    protected async Task DeleteCourse(int ID)
+    {
+        await Task.Run(() =>
+        {
+            CourseService.DeleteCourse(ID);
+        });
+        this.isDelete = false;
+        await GetCourses();
+    }
+
+    protected void CloseModal()
+    {
+        this.isAdd = false;
+        this.isDelete = false;
+    }
+}

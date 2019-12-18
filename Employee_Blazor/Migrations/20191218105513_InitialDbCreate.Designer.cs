@@ -4,14 +4,16 @@ using Employee_Blazor.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Employee_Blazor.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    partial class EmployeeContextModelSnapshot : ModelSnapshot
+    [Migration("20191218105513_InitialDbCreate")]
+    partial class InitialDbCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,18 +34,6 @@ namespace Employee_Blazor.Migrations
                     b.HasKey("CityId");
 
                     b.ToTable("Cities");
-
-                    b.HasData(
-                        new
-                        {
-                            CityId = 1,
-                            CityName = "Pretoria"
-                        },
-                        new
-                        {
-                            CityId = 2,
-                            CityName = "Johannesburg"
-                        });
                 });
 
             modelBuilder.Entity("Employee_Blazor.Models.Courses", b =>
@@ -62,20 +52,6 @@ namespace Employee_Blazor.Migrations
                     b.HasKey("CourseId");
 
                     b.ToTable("Courses");
-
-                    b.HasData(
-                        new
-                        {
-                            CourseId = 1,
-                            CourseName = "Coding 101",
-                            Credits = 10
-                        },
-                        new
-                        {
-                            CourseId = 2,
-                            CourseName = "Coding 201",
-                            Credits = 20
-                        });
                 });
 
             modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
@@ -112,32 +88,6 @@ namespace Employee_Blazor.Migrations
                     b.HasKey("EmployeeId");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            EmployeeId = 1L,
-                            City = "Pretoria",
-                            DateOfBirth = new DateTime(1979, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Department = "IT",
-                            Email = "uncle.bob@gmail.com",
-                            FirstName = "Uncle",
-                            Gender = "Male",
-                            LastName = "Bob",
-                            PhoneNumber = "999-888-7777"
-                        },
-                        new
-                        {
-                            EmployeeId = 2L,
-                            City = "Johannesburg",
-                            DateOfBirth = new DateTime(1981, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Department = "Management",
-                            Email = "jan.kirsten@gmail.com",
-                            FirstName = "Jan",
-                            Gender = "Male",
-                            LastName = "Kirsten",
-                            PhoneNumber = "111-222-3333"
-                        });
                 });
 
             modelBuilder.Entity("Employee_Blazor.Models.EmployeeCourse", b =>
@@ -153,23 +103,6 @@ namespace Employee_Blazor.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeCourse");
-
-                    b.HasData(
-                        new
-                        {
-                            CourseId = 1,
-                            EmployeeId = 1L
-                        },
-                        new
-                        {
-                            CourseId = 2,
-                            EmployeeId = 1L
-                        },
-                        new
-                        {
-                            CourseId = 1,
-                            EmployeeId = 2L
-                        });
                 });
 
             modelBuilder.Entity("Employee_Blazor.Models.EmployeeCourse", b =>

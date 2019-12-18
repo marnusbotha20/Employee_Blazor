@@ -1,13 +1,12 @@
 ﻿@page "/FetchEmployee"
 
-@using Employee_Blazor.DataAccess
+@using Employee_Blazor.Service
 @using Employee_Blazor.Models
-@using BlazorDateRangePicker
 
 @inject EmployeeService employeeService
 <style>
     .table {
-        margin-top:25px;
+        margin-top: 25px;
     }
 </style>
 <h1>Employee Management System</h1>
@@ -82,59 +81,90 @@
                     </div>
                     <div class="modal-body">
                         <form>
-                            <div class="form-group">
-                                <label for="Name" class="control-label">Name</label>
-                                <input for="Name" class="form-control" @bind="@emp.FirstName" />
-                            </div>
-                            <div class="form-group">
-                                <label for="LastName" class="control-label">Surname</label>
-                                <input for="LastName" class="form-control" @bind="@emp.LastName" />
-                            </div>
-                            <div class="form-group">
-                                <label for="DateOfBirth" class="control-label">DOB</label>
-                                <input for="DateOfBirth" class="form-control" @bind="@emp.DateOfBirth" />
-                            </div>
-                            <div class="form-group">
-                                <label for="PhoneNumber" class="control-label">PhoneNumber</label>
-                                <input for="PhoneNumber" class="form-control" @bind="@emp.PhoneNumber" />
-                            </div>
-                            <div class="form-group">
-                                <label for="Email" class="control-label">Email</label>
-                                <input for="Email" class="form-control" @bind="@emp.Email" />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Gender" class="control-label">Gender</label>
-                                <select asp-for="Gender" class="form-control" @bind="@emp.Gender">
-                                    <option value="">-- Select Gender --</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Department" class="control-label">Department</label>
-                                <input asp-for="Department" class="form-control" @bind="@emp.Department" />
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="City" class="control-label">City</label>
-                                <select asp-for="City" class="form-control" @bind="@emp.City">
-                                    <option value="">-- Select City --</option>
-                                    @foreach (var city in cityList)
-                                    {
-                                        <option value="@city.CityName">@city.CityName</option>
-                                    }
-                                </select>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="Name" class="control-label">Name</label>
+                                        <input for="Name" class="form-control" @bind="@emp.FirstName" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="LastName" class="control-label">Surname</label>
+                                        <input for="LastName" class="form-control" @bind="@emp.LastName" />
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label asp-for="Course" class="control-label">City</label>
-                                <select asp-for="Course" class="form-control" @bind="@emp.Courses.Id">
-                                    <option value="">-- Select Course --</option>
-                                    @foreach (var course in courseList)
-                                    {
-                                        <option value="@course.Id">@course.CourseName</option>
-                                    }
-                                </select>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="DateOfBirth" class="control-label">DOB</label>
+                                        <input for="DateOfBirth" class="form-control" @bind="@emp.DateOfBirth" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="PhoneNumber" class="control-label">PhoneNumber</label>
+                                        <input for="PhoneNumber" class="form-control" @bind="@emp.PhoneNumber" />
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="Email" class="control-label">Email</label>
+                                        <input for="Email" class="form-control" @bind="@emp.Email" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Department" class="control-label">Department</label>
+                                        <input asp-for="Department" class="form-control" @bind="@emp.Department" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="Gender" class="control-label">Gender</label>
+                                        <select asp-for="Gender" class="form-control" @bind="@emp.Gender">
+                                            <option value="">-- Select Gender --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="City" class="control-label">City</label>
+                                        <select asp-for="City" class="form-control" @bind="@emp.City">
+                                            <option value="">-- Select City --</option>
+                                            @foreach (var city in cityList)
+                                            {
+                                                <option value="@city.CityName">@city.CityName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="Course" class="control-label">Course</label>
+                                        <select asp-for="Course" class="form-control" @bind="@emp.Course">
+                                            <option value="">-- Select Course --</option>
+                                            @foreach (var course in courseList)
+                                            {
+                                                <option value="@course.Id">@course.CourseName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -218,6 +248,7 @@
     {
         await GetCities();
         await GetEmployee();
+        await GetCourses();
     }
 
     protected async Task GetCities()

@@ -50,6 +50,19 @@ namespace Employee_Blazor.DataAccess
             }
         }
 
+        public void AddCourse(Courses courses)
+        {
+            try
+            {
+                db.Courses.Add(courses);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateEmployee(Employee employee)
         {
             db.Entry(employee).State = EntityState.Modified;
@@ -83,17 +96,45 @@ namespace Employee_Blazor.DataAccess
             }
         }
 
+        //Course Methods
         public List<Courses> GetCourses()
+        {
+            return db.Courses.ToList();
+        }
+
+        public Courses GetCoursesDetails(int id)
         {
             try
             {
-                return db.Courses.ToList();
+                var course = db.Courses.Find(id);
+                db.Entry(course).State = EntityState.Detached;
+                return course;
             }
             catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
+        }
+
+        public void UpdateCourse(Courses courses)
+        {
+            db.Entry(courses).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+        
+        public void DeleteCourse(int id)
+        {
+            try
+            {
+                Courses c = db.Courses.Find(id);
+                db.Courses.Remove(c);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

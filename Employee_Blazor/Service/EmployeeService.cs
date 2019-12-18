@@ -1,10 +1,11 @@
-﻿using Employee_Blazor.Models;
+﻿using Employee_Blazor.DataAccess;
+using Employee_Blazor.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Employee_Blazor.DataAccess
+namespace Employee_Blazor.Service
 {
     public class EmployeeService
     {
@@ -12,21 +13,7 @@ namespace Employee_Blazor.DataAccess
         public Task<List<Employee>> GetEmployeeList()
         {
             IEnumerable<Employee> employees = objemployee.GetAllEmployees();
-
-            var list = employees.Select(index => new Employee
-            {
-                DateOfBirth = index.DateOfBirth,
-                Email = index.Email,
-                EmployeeId = index.EmployeeId,
-                FirstName = index.FirstName,
-                LastName = index.LastName,
-                PhoneNumber = index.PhoneNumber,
-                City = index.City,
-                Department = index.Department,
-                Gender = index.Gender
-            }).ToList();
-
-            return Task.FromResult(list.ToList());
+            return Task.FromResult(employees.ToList());
         }
         public void Create(Employee employee)
         {

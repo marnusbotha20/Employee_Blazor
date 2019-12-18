@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_Blazor.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    [Migration("20191218084344_InitialDbCreate")]
-    partial class InitialDbCreate
+    [Migration("20191218105801_AddedDefaultData")]
+    partial class AddedDefaultData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,7 @@ namespace Employee_Blazor.Migrations
 
             modelBuilder.Entity("Employee_Blazor.Models.Courses", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -61,20 +61,20 @@ namespace Employee_Blazor.Migrations
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseId");
 
                     b.ToTable("Courses");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            CourseId = 1,
                             CourseName = "Coding 101",
                             Credits = 10
                         },
                         new
                         {
-                            Id = 2,
+                            CourseId = 2,
                             CourseName = "Coding 201",
                             Credits = 20
                         });
@@ -89,9 +89,6 @@ namespace Employee_Blazor.Migrations
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CoursesId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -115,8 +112,6 @@ namespace Employee_Blazor.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
-
-                    b.HasIndex("CoursesId");
 
                     b.ToTable("Employees");
 
@@ -147,11 +142,51 @@ namespace Employee_Blazor.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
+            modelBuilder.Entity("Employee_Blazor.Models.EmployeeCourse", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CourseId", "EmployeeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeeCourse");
+
+                    b.HasData(
+                        new
+                        {
+                            CourseId = 1,
+                            EmployeeId = 1L
+                        },
+                        new
+                        {
+                            CourseId = 2,
+                            EmployeeId = 1L
+                        },
+                        new
+                        {
+                            CourseId = 1,
+                            EmployeeId = 2L
+                        });
+                });
+
+            modelBuilder.Entity("Employee_Blazor.Models.EmployeeCourse", b =>
                 {
                     b.HasOne("Employee_Blazor.Models.Courses", "Courses")
-                        .WithMany("Employees")
-                        .HasForeignKey("CoursesId");
+                        .WithMany("EmployeeCourse")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Employee_Blazor.Models.Employee", "Employee")
+                        .WithMany("EmployeeCourse")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
