@@ -19,6 +19,33 @@ namespace Employee_Blazor.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Employee_Blazor.Models.Cities", b =>
+                {
+                    b.Property<int>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CityId");
+
+                    b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            CityId = 1,
+                            CityName = "Pretoria"
+                        },
+                        new
+                        {
+                            CityId = 2,
+                            CityName = "Johannesburg"
+                        });
+                });
+
             modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
                 {
                     b.Property<long>("EmployeeId")

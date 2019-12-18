@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Blazor.Services;
 
 namespace Employee_Blazor
 {
@@ -25,8 +26,6 @@ namespace Employee_Blazor
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureCors();
-            services.ConfigureIISIntegration();
             services.AddScoped<EmployeeService>();
 
             services.AddRazorPages();

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_Blazor.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    [Migration("20191218055423_AddedDepartmentCityToEmployee")]
-    partial class AddedDepartmentCityToEmployee
+    [Migration("20191218072138_InitialDbCreateMigration")]
+    partial class InitialDbCreateMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace Employee_Blazor.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Employee_Blazor.Models.Cities", b =>
+                {
+                    b.Property<int>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CityId");
+
+                    b.ToTable("Cities");
+                });
 
             modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
                 {
@@ -60,18 +75,24 @@ namespace Employee_Blazor.Migrations
                         new
                         {
                             EmployeeId = 1L,
+                            City = "Pretoria",
                             DateOfBirth = new DateTime(1979, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Department = "IT",
                             Email = "uncle.bob@gmail.com",
                             FirstName = "Uncle",
+                            Gender = "Male",
                             LastName = "Bob",
                             PhoneNumber = "999-888-7777"
                         },
                         new
                         {
                             EmployeeId = 2L,
+                            City = "Johannesburg",
                             DateOfBirth = new DateTime(1981, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Department = "Management",
                             Email = "jan.kirsten@gmail.com",
                             FirstName = "Jan",
+                            Gender = "Male",
                             LastName = "Kirsten",
                             PhoneNumber = "111-222-3333"
                         });

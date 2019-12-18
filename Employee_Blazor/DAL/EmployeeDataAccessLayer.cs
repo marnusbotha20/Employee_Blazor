@@ -1,4 +1,5 @@
 ﻿using Employee_Blazor.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +11,76 @@ namespace Employee_Blazor.DataAccess
     {
         EmployeeContext db = new EmployeeContext();
 
-        public IEnumerable<Employee> GetAll()
+        public IEnumerable<Employee> GetAllEmployees()
         {
-            return db.Employees.ToList();
+            try
+            {
+                return db.Employees.ToList();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Employee Get(long id)
+        public Employee GetEmployeeData(long id)
         {
-            return db.Employees
-                  .FirstOrDefault(e => e.EmployeeId == id);
+            try
+            {
+                var employee = db.Employees.Find(id);
+                db.Entry(employee).State = EntityState.Detached;
+                return employee;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public void Add(Employee entity)
+        public void AddEmployee(Employee employee)
         {
-            db.Employees.Add(entity);
+            try
+            {
+                db.Employees.Add(employee);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void UpdateEmployee(Employee employee)
+        {
+            db.Entry(employee).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        public void Update(Employee employee, Employee entity)
+        public void DeleteEmployee(int id)
         {
-            employee.FirstName = entity.FirstName;
-            employee.LastName = entity.LastName;
-            employee.Email = entity.Email;
-            employee.DateOfBirth = entity.DateOfBirth;
-            employee.PhoneNumber = entity.PhoneNumber;
+            try
+            {
+                Employee emp = db.Employees.Find(id);
+                db.Employees.Remove(emp);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-            db.SaveChanges();
         }
 
-        public void Delete(Employee employee)
+        public List<Cities> GetCityData()
         {
-            db.Employees.Remove(employee);
-            db.SaveChanges();
+            try
+            {
+                return db.Cities.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

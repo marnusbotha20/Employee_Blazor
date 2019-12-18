@@ -8,10 +8,10 @@ namespace Employee_Blazor.DataAccess
 {
     public class EmployeeService
     {
-        EmployeeDataAccessLayer DataRepository = new EmployeeDataAccessLayer();
-        public Task<List<Employee>> GetEmployeesAsync()
+        EmployeeDataAccessLayer objemployee = new EmployeeDataAccessLayer();
+        public Task<List<Employee>> GetEmployeeList()
         {
-            IEnumerable<Employee> employees = DataRepository.GetAll();
+            IEnumerable<Employee> employees = objemployee.GetAllEmployees();
 
             var list = employees.Select(index => new Employee
             {
@@ -20,25 +20,33 @@ namespace Employee_Blazor.DataAccess
                 EmployeeId = index.EmployeeId,
                 FirstName = index.FirstName,
                 LastName = index.LastName,
-                PhoneNumber = index.PhoneNumber
+                PhoneNumber = index.PhoneNumber,
+                City = index.City,
+                Department = index.Department,
+                Gender = index.Gender
             }).ToList();
 
             return Task.FromResult(list.ToList());
         }
-
         public void Create(Employee employee)
         {
-            DataRepository.Add(employee);
+            objemployee.AddEmployee(employee);
         }
-
-        public Employee Details(int id)
+        public Task<Employee> Details(int id)
         {
-            return DataRepository.Get(id);
+            return Task.FromResult(objemployee.GetEmployeeData(id));
         }
-
-        public void Edit([FromBody]Employee employee, Employee entity)
+        public void Edit(Employee employee)
         {
-            DataRepository.Update(employee, entity);
+            objemployee.UpdateEmployee(employee);
+        }
+        public void Delete(int id)
+        {
+            objemployee.DeleteEmployee(id);
+        }
+        public Task<List<Cities>> GetCities()
+        {
+            return Task.FromResult(objemployee.GetCityData());
         }
     }
 }

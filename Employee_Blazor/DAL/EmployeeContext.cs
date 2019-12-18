@@ -11,6 +11,7 @@ namespace Employee_Blazor.DataAccess
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Cities> Cities { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,17 @@ namespace Employee_Blazor.DataAccess
                 City = "Johannesburg",
                 Gender = Gender.Male.ToString(),
                 Department = "Management"
+            });
+
+            modelBuilder.Entity<Cities>().HasData(new Models.Cities
+            {
+                CityId = 1,
+                CityName = "Pretoria"
+            },
+            new Models.Cities
+            {
+                CityId = 2,
+                CityName = "Johannesburg"
             });
         }
 

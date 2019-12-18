@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_Blazor.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    [Migration("20191218055934_UpdatedDefaultData")]
-    partial class UpdatedDefaultData
+    [Migration("20191218075609_AddedDefaultDataToCities")]
+    partial class AddedDefaultDataToCities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,33 @@ namespace Employee_Blazor.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Employee_Blazor.Models.Cities", b =>
+                {
+                    b.Property<int>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CityId");
+
+                    b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            CityId = 1,
+                            CityName = "Pretoria"
+                        },
+                        new
+                        {
+                            CityId = 2,
+                            CityName = "Johannesburg"
+                        });
+                });
 
             modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
                 {

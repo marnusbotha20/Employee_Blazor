@@ -1,11 +1,11 @@
-﻿@using Employee_Blazor.Models
+﻿@page "/AddEmployee"
+
 @using Employee_Blazor.DataAccess
-
-@page "/addemployee"
-
-@inject HttpClient Http
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@using Employee_Blazor.Models
 @inject EmployeeService EmployeeService
+
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject HttpClient Http
 
 <h1>Create</h1>
 <h3>Employee</h3>
@@ -35,7 +35,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-default" onclick="@CreateEmployee()">Save</button>
-                <button class="btn" onclick="@Cancel()">Cancel</button>
+                @*<button class="btn" onclick="@Cancel()">Cancel</button>*@
             </div>
         </form>
     </div>
@@ -47,12 +47,12 @@
 
     protected async Task CreateEmployee()
     {
-        EmployeeService.Create(emp);
-        UriHelper.NavigateTo("/fetchemployee");
+        //await EmployeeService.Create(emp);
+        //UriHelper.NavigateTo("/FetchEmployee");
     }
 
-    protected async Task Cancel()
-    {
-        UriHelper.NavigateTo("/fetchemployee");
-    }
+    //protected async Task Cancel()
+    //{
+    //    //UriHelper.NavigateTo("/FetchEmployee");
+    //}
 }
