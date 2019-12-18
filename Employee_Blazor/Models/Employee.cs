@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,5 +18,7 @@ namespace Employee_Blazor.Models
         public string Gender { get; set; }
         public string Department { get; set; }
         public string City { get; set; }
+
+        public Courses Courses { get; set; }
     }
 }

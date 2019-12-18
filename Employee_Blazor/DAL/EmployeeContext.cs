@@ -12,6 +12,7 @@ namespace Employee_Blazor.DataAccess
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Cities> Cities { get; internal set; }
+        public DbSet<Courses> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,10 +46,23 @@ namespace Employee_Blazor.DataAccess
                 CityId = 1,
                 CityName = "Pretoria"
             },
-            new Models.Cities
+            new Cities
             {
                 CityId = 2,
                 CityName = "Johannesburg"
+            });
+            
+            modelBuilder.Entity<Courses>().HasData(new Models.Courses
+            {
+                Id = 1,
+                CourseName = "Coding 101",
+                Credits = 10
+            },
+            new Courses
+            {
+                Id = 2,
+                CourseName = "Coding 201",
+                Credits = 20
             });
         }
 

@@ -46,6 +46,38 @@ namespace Employee_Blazor.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Employee_Blazor.Models.Courses", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CourseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CourseName = "Coding 101",
+                            Credits = 10
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CourseName = "Coding 201",
+                            Credits = 20
+                        });
+                });
+
             modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
                 {
                     b.Property<long>("EmployeeId")
@@ -55,6 +87,9 @@ namespace Employee_Blazor.Migrations
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CoursesId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -78,6 +113,8 @@ namespace Employee_Blazor.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("CoursesId");
 
                     b.ToTable("Employees");
 
@@ -106,6 +143,13 @@ namespace Employee_Blazor.Migrations
                             LastName = "Kirsten",
                             PhoneNumber = "111-222-3333"
                         });
+                });
+
+            modelBuilder.Entity("Employee_Blazor.Models.Employee", b =>
+                {
+                    b.HasOne("Employee_Blazor.Models.Courses", "Courses")
+                        .WithMany("Employees")
+                        .HasForeignKey("CoursesId");
                 });
 #pragma warning restore 612, 618
         }

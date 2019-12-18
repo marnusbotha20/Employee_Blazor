@@ -48,5 +48,10 @@ namespace Employee_Blazor.DataAccess
         {
             return Task.FromResult(objemployee.GetCityData());
         }
+
+        public Task<List<Courses>> GetCourses()
+        {
+            return Task.FromResult(objemployee.GetCourses());
+        }
     }
 }

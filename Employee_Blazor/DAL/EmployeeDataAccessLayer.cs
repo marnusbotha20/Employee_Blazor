@@ -82,5 +82,18 @@ namespace Employee_Blazor.DataAccess
                 throw ex;
             }
         }
+
+        public List<Courses> GetCourses()
+        {
+            try
+            {
+                return db.Courses.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }
