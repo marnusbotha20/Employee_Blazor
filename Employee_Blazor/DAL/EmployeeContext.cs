@@ -21,7 +21,10 @@ namespace Employee_Blazor.DataAccess
                 LastName = "Bob",
                 Email = "uncle.bob@gmail.com",
                 DateOfBirth = new DateTime(1979, 04, 25),
-                PhoneNumber = "999-888-7777"
+                PhoneNumber = "999-888-7777",
+                City = "Pretoria",
+                Gender = Gender.Male.ToString(),
+                Department = "IT"
 
             }, new Employee
             {
@@ -30,7 +33,10 @@ namespace Employee_Blazor.DataAccess
                 LastName = "Kirsten",
                 Email = "jan.kirsten@gmail.com",
                 DateOfBirth = new DateTime(1981, 07, 13),
-                PhoneNumber = "111-222-3333"
+                PhoneNumber = "111-222-3333",
+                City = "Johannesburg",
+                Gender = Gender.Male.ToString(),
+                Department = "Management"
             });
         }
 
