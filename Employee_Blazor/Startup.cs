@@ -11,6 +11,7 @@ using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Blazor.Services;
 using Employee_Blazor.Service;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Employee_Blazor
 {
@@ -29,6 +30,10 @@ namespace Employee_Blazor
         {
             services.AddScoped<EmployeeService>();
             services.AddScoped<CourseService>();
+            services.AddScoped<AuthenticationService>();
+            //services.AddScoped<AuthenticationStateProvider, AuthenticationService>();
+
+            //services.AddScoped(IUriHelper);
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

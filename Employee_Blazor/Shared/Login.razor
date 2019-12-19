@@ -1,0 +1,58 @@
+﻿@page "/Login"
+@*@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper*@
+
+@using Employee_Blazor.Service
+@using Employee_Blazor.Models
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationService AuthenticationService
+
+    <input class="form-control" type="text" placeholder="Username" @bind="@Username" />
+    <button @onclick="@LogUsername">Log username</button>
+
+    <AuthorizeView>
+        <Authorized>
+            <h1>Hello, @context.User.Identity.Name!</h1>
+            <p>You can only see this content if you're authenticated.</p>
+        </Authorized>
+        <NotAuthorized>
+            <h1>Authentication Failure!</h1>
+            <p>You're not signed in.</p>
+        </NotAuthorized>
+    </AuthorizeView>
+
+@code {
+    [Parameter]
+    public string Username { get; set; }
+    [Parameter]
+    public string Password { get; set; }
+
+    private async Task LogUsername()
+    {
+        var authState = await AuthenticationService.GetAuthenticationStateAsync(Username);
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            Console.WriteLine($"{user.Identity.Name} is authenticated.");
+        }
+        else
+        {
+            Console.WriteLine("The user is NOT authenticated.");
+        }
+    }
+
+    
+
+    public string url = "/home";
+
+    public async Task AuthAsync()
+    {
+        var valid = await AuthenticationService.AuthenticateAsync(Username);
+        if (valid)
+        {
+            //UriHelper.NavigateTo(url); //i see no overload that accepts parameters
+        }
+    }
+}

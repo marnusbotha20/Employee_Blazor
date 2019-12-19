@@ -58,7 +58,7 @@
                             @CountCourses(course.CourseId)
                         </td>
                         <td>
-                            <button class="btn btn-default" @onclick="@(async () => await EditCourse(course.CourseId))">Edit</button>
+                            <button class="btn btn-warning" @onclick="@(async () => await EditCourse(course.CourseId))">Edit</button>
                             <button class="btn btn-danger" @onclick="@(async () => await DeleteConfirm(course.CourseId))">Delete</button>
                         </td>
                     </tr>

@@ -149,3 +149,12 @@ app {
         display: block;
     }
 }
+
+
+.table thead th {
+    color: #9E9E9E;
+}
+
+.table td, .table th {
+    color: white;
+}
