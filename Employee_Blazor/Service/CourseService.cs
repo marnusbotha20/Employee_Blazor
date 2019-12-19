@@ -36,5 +36,26 @@ namespace Employee_Blazor.Service
         {
             objemployee.AddCourse(courses);
         }
+
+        public int CountCourse(long Id)
+        {
+            return objemployee.GetCoursesCount(Id);
+        }
+
+        public double CountCredits(long Id)
+        {
+            return objemployee.CountCredits(Id);
+        }
+
+        public Task<List<Courses>> GetEmployeeCourses(long employeeID,bool link)
+        {
+            IEnumerable<Courses> courses = objemployee.GetEmployeeCourses(employeeID, link);
+            return Task.FromResult(courses.ToList());
+        }
+
+        public void LinkCourses(long employeeID, List<string> EmployeeCourses,bool LinkAction)
+        {
+            objemployee.LinkCourses(employeeID, EmployeeCourses, LinkAction);
+        }
     }
 }

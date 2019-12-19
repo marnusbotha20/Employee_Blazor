@@ -4,6 +4,8 @@
 @using Employee_Blazor.Models
 
 @inject EmployeeService employeeService
+@inject CourseService CourseService
+
 <style>
     .table {
         margin-top: 25px;
@@ -44,6 +46,12 @@
                     <th>Department</th>
                     <th>City</th>
                     <th>Total Credits</th>
+                    <th>
+                        Employee Action
+                    </th>
+                    <th>
+                        Course Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -59,10 +67,17 @@
                         <td>@emp.Gender</td>
                         <td>@emp.Department</td>
                         <td>@emp.City</td>
-                        <td></td>
                         <td>
-                            <button class="btn btn-default" @onclick="@(async () => await EditEmployee(@emp.EmployeeId))">Edit</button>
-                            <button class="btn btn-danger" @onclick="@(async () => await DeleteConfirm(@emp.EmployeeId))">Delete</button>
+                            @CountCredits(emp.EmployeeId)
+                        </td>
+                        <td>
+                            <button class="btn btn-warning" @onclick="@(async () => await EditEmployee(@emp.EmployeeId))">Edit</button>
+                            <button class="btn btn-danger" @onclick="@(async () => await DeleteConfirm(@emp.EmployeeId))">Remove</button>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-success" @onclick="@(async () => await LinkCoursesConfirm(@emp.EmployeeId))">Add</button>
+                            <button class="btn btn-danger" @onclick="@(async () => await DeLinkCoursesConfirm(@emp.EmployeeId))">Remove</button>
                         </td>
                     </tr>
                 }
@@ -154,19 +169,19 @@
                             </div>
 
                             @*<div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label asp-for="Course" class="control-label">Course</label>
-                                        <select asp-for="Course" class="form-control" @bind="@emp.Course">
-                                            <option value="">-- Select Course --</option>
-                                            @foreach (var course in courseList)
-                                            {
-                                                <option value="@course.Id">@course.CourseName</option>
-                                            }
-                                        </select>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label asp-for="Course" class="control-label">Course</label>
+                                            <select asp-for="Course" class="form-control" @bind="@emp.Course">
+                                                <option value="">-- Select Course --</option>
+                                                @foreach (var course in courseList)
+                                                {
+                                                    <option value="@course.Id">@course.CourseName</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>*@
+                                </div>*@
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -230,19 +245,70 @@
             </div>
         </div>
     }
+
+    @if (isLink)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">@modalTitle</h3>
+                    </div>
+                    <div class="modal-body">
+                        @if (employeeCourseList.Count != 0)
+                        {
+                            <h4>Select courses</h4>
+                            <table class="table">
+                                @foreach (var course in employeeCourseList)
+                                {
+                                    <tr>
+                                        <td>Course Name</td>
+                                        <td>@course.CourseName</td>
+                                        <td>
+                                            <input type="checkbox" @onchange="eventArgs => { CheckboxClicked(course.CourseId, eventArgs.Value); }" />
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        }
+                        else
+                        {
+                            <h4>No courses to select</h4>
+                        }
+
+                    </div>
+                    <div class="modal-footer">
+                        @if (employeeCourseList.Count != 0)
+                        {
+                            <button class="btn btn-danger" @onclick="@(async () => await LinkCourses(selectedEmployeeId,LinkAction))" data-dismiss="modal">Link Courses</button>
+                        }
+                        <button class="btn btn-warning" @onclick="@CloseModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 
 
 @code {
-
+    protected long selectedEmployeeId = 0;
     protected List<Employee> empList;
     protected List<Cities> cityList = new List<Cities>();
     protected List<Courses> courseList = new List<Courses>();
+
+    protected List<Courses> employeeCourseList = new List<Courses>();
+    public List<string> EmployeeCourses { get; set; } = new List<string>();
+
     protected Employee emp = new Employee();
     protected string modalTitle { get; set; }
     protected Boolean isDelete = false;
     protected Boolean isAdd = false;
+    protected Boolean isLink = false;
+
+    protected Boolean LinkAction = false;
 
     protected string SearchString { get; set; }
 
@@ -331,5 +397,58 @@
     {
         this.isAdd = false;
         this.isDelete = false;
+        this.isLink = false;
+    }
+
+    void CheckboxClicked(int CourseId, object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            if (!EmployeeCourses.Contains(CourseId.ToString()))
+            {
+                EmployeeCourses.Add(CourseId.ToString());
+            }
+        }
+        else
+        {
+            if (EmployeeCourses.Contains(CourseId.ToString()))
+            {
+                EmployeeCourses.Remove(CourseId.ToString());
+            }
+        }
+    }
+
+    protected async Task LinkCoursesConfirm(long empID)
+    {
+        this.isLink = true;
+        this.modalTitle = "Link Employee";
+        this.selectedEmployeeId = empID;
+        this.LinkAction = true;
+        employeeCourseList = await CourseService.GetEmployeeCourses(empID, true);
+    }
+
+    protected async Task DeLinkCoursesConfirm(long empID)
+    {
+        this.isLink = true;
+        this.modalTitle = "De-Link Employee";
+        this.selectedEmployeeId = empID;
+        this.LinkAction = false;
+
+        employeeCourseList = await CourseService.GetEmployeeCourses(empID, false);
+    }
+
+    protected async Task LinkCourses(long empID, bool linkAction)
+    {
+        CourseService.LinkCourses(empID, EmployeeCourses, linkAction);
+
+        this.isLink = false;
+        await GetEmployee();
+    }
+
+    protected double CountCredits(long Id)
+    {
+
+        var count = CourseService.CountCredits(Id);
+        return count;
     }
 }
